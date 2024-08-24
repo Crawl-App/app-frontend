@@ -557,6 +557,9 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: 15,
         right: 15,
+        padding: 12,
+        borderRadius: 25,
+        backgroundColor: "rgba(246,194,91,1)",
     },
     profileIcon: {
         width: 45,
