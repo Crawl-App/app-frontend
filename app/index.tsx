@@ -35,9 +35,9 @@ const getDirections = async (startLoc: string, destinationLoc: string) => {
     }
 };
 export default function App() {
-  const [coordsList, setCoordsList] = useState([]);  // Define coordsList state
-  const [markers, setMarkers] = useState([]);  // Define markers state
-		  const [showRoute, setShowRoute] = useState(false); // State to control visibility when pressing the button
+    const [coordsList, setCoordsList] = useState([]);  // Define coordsList state
+    const [markers, setMarkers] = useState([]);  // Define markers state
+    const [showRoute, setShowRoute] = useState(false); // State to control visibility when pressing the button
 
     //both are to set up the initial location
     const initialLocation = {latitude: 37.771707, longitude: -122.4053769};
@@ -76,111 +76,110 @@ export default function App() {
         // Add more predefined locations here
     ];
 
-	  //starting location handling 
-	  const handleButtonPress = (address,numberInput) => {
-    console.log(numberInput);
-		setShowRoute(true);
-	  
-		/*Geocoder.from(address)
-		.then(json => {
-			var location = json.results[0].geometry.location;
-			console.log(location);
-			predefinedLocations.pop();
-			predefinedLocations.push({latitude: location.lat, longitude: location.lng});
-		})
-		.catch(error => console.warn(error));*/
-	
+    const handleStartCrawl = (address,numberInput) => {
+        console.log(numberInput);
+        setShowRoute(true);
 
-//search for the path given the starting location
-	 /* const fetchPubCrawlRoute = async () => {
-		try {
-		  const response = await fetch('https://crawl-nine.vercel.app/find_pub_crawl', {
-			method: 'POST',
-			headers: {
-			  'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({
-			  coordinates: [predefinedLocations[0].latitude, predefinedLocations[0].longitude],
-			  length: 2,
-			  use_current_loc: false,
-			}),
-		  });
-	
-		  const data = await response.json();
-	
-		  const routeCoordinates = data.route[0].map(loc => ({
-			latitude: loc[1],
-			longitude: loc[2],
-		  }));
-		  
-		  console.log(routeCoordinates);
-		  setCoordsList(routeCoordinates);
-		  setMarkers(routeCoordinates);
-			console.log("Updated Coords List:", coordsList);
-		  console.log(coordsList);
-		  console.log(markers);
-		} catch (error) {
-		  console.error("Error fetching route:", error);
-		}
-	  };
-	  fetchPubCrawlRoute();
-	  */
-	  
-	//get the routes between the locations
-			const fetchAllDirections = async () => {
-			  const allCoords = [];
-			  const allMarkers = [];
-		
-			  for (let i = 0; i < coordsList.length - 1; i++) {
-				const startLoc = coordsList[i];
-				const destinationLoc = coordsList[i + 1];
-				const directions = await getDirections(
-				  `${startLoc.latitude},${startLoc.longitude}`,
-				  `${destinationLoc.latitude},${destinationLoc.longitude}`
-				);
-				setCoordsList(allCoords);
-		  setMarkers(allMarkers);
-			  }
-			  allMarkers.push(coordsList[coordsList.length - 1]);
+        /*Geocoder.from(address)
+        .then(json => {
+            var location = json.results[0].geometry.location;
+            console.log(location);
+            predefinedLocations.pop();
+            predefinedLocations.push({latitude: location.lat, longitude: location.lng});
+        })
+        .catch(error => console.warn(error));*/
 
-			};
-			fetchAllDirections();
-		};
-	  
-		//show the map
-	return (
-     <View style={{ flex: 1 }}>
-          <MapView style={StyleSheet.absoluteFill} customMapStyle={mapStyle} initialRegion={{latitude: myLocation.latitude,longitude:myLocation.longitude,latitudeDelta:0.01,longitudeDelta:0.01}}>
-            
-          {coordsList.map((coords, index) => {
-  // Ensure you only create a Polyline if there's a next coordinate to connect to
-  if (index < coordsList.length - 1) {
-    const segment = [coords, coordsList[index + 1]]; // Create a segment from this point to the next point
+
+        //search for the path given the starting location
+        /* const fetchPubCrawlRoute = async () => {
+        try {
+          const response = await fetch('https://crawl-nine.vercel.app/find_pub_crawl', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              coordinates: [predefinedLocations[0].latitude, predefinedLocations[0].longitude],
+              length: 2,
+              use_current_loc: false,
+            }),
+          });
+
+          const data = await response.json();
+
+          const routeCoordinates = data.route[0].map(loc => ({
+            latitude: loc[1],
+            longitude: loc[2],
+          }));
+
+          console.log(routeCoordinates);
+          setCoordsList(routeCoordinates);
+          setMarkers(routeCoordinates);
+            console.log("Updated Coords List:", coordsList);
+          console.log(coordsList);
+          console.log(markers);
+        } catch (error) {
+          console.error("Error fetching route:", error);
+        }
+      };
+      fetchPubCrawlRoute();
+      */
+
+        //get the routes between the locations
+        const fetchAllDirections = async () => {
+            const allCoords = [];
+            const allMarkers = [];
+
+            for (let i = 0; i < coordsList.length - 1; i++) {
+                const startLoc = coordsList[i];
+                const destinationLoc = coordsList[i + 1];
+                const directions = await getDirections(
+                    `${startLoc.latitude},${startLoc.longitude}`,
+                    `${destinationLoc.latitude},${destinationLoc.longitude}`
+                );
+                setCoordsList(allCoords);
+                setMarkers(allMarkers);
+            }
+            allMarkers.push(coordsList[coordsList.length - 1]);
+
+        };
+        fetchAllDirections();
+    };
+
+    //show the map
     return (
-      <Polyline
-          key={`polyline-${index}`}
-          coordinates={segment} // Pass the segment (two points) as coordinates
-          strokeColor="red"
-          strokeWidth={4}
-        />
-    );
-  }
-  return null; // No polyline for the last point
-})}
+        <View style={{ flex: 1 }}>
+            <MapView style={StyleSheet.absoluteFill} customMapStyle={mapStyle} initialRegion={{latitude: myLocation.latitude,longitude:myLocation.longitude,latitudeDelta:0.01,longitudeDelta:0.01}}>
 
-          {markers.map((marker, index) => (
-          <Marker
-              key={`marker-${index}`}
-              coordinate={marker}
-              pinColor={index === 0 ? 'green' : (index === markers.length - 1 ? 'red' : 'blue')}
-          />
-          ))}
-</MapView>
+                {coordsList.map((coords, index) => {
+                    // Ensure you only create a Polyline if there's a next coordinate to connect to
+                    if (index < coordsList.length - 1) {
+                        const segment = [coords, coordsList[index + 1]]; // Create a segment from this point to the next point
+                        return (
+                            <Polyline
+                                key={`polyline-${index}`}
+                                coordinates={segment} // Pass the segment (two points) as coordinates
+                                strokeColor="red"
+                                strokeWidth={4}
+                            />
+                        );
+                    }
+                    return null; // No polyline for the last point
+                })}
+
+                {markers.map((marker, index) => (
+                    <Marker
+                        key={`marker-${index}`}
+                        coordinate={marker}
+                        pinColor={index === 0 ? 'green' : (index === markers.length - 1 ? 'red' : 'blue')}
+                    />
+                ))}
+            </MapView>
                 <TouchableOpacity style={styles.profileIconContainer} onPress={() => router.push('/settings')}>
-                    <FontAwesomeIcon icon={faGear} size={20}/>              
-          </TouchableOpacity>
-          <Navbar onPress={handleButtonPress} />
-        </View>
+                    <FontAwesomeIcon icon={faGear} size={20}/>
+                </TouchableOpacity>
+                <Navbar onPress={handleStartCrawl} />
+            </View>
     );
 }
 const mapStyle =
