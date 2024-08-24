@@ -85,7 +85,7 @@ export default function App() {
 		  const data = await response.json();
           console.log(data);
 
-		  const routeCoordinates = data.route.map(loc => ({
+		  const routeCoordinates = data.route[0].map(loc => ({
 			latitude: loc[1],
 			longitude: loc[2],
 		  }));
@@ -105,9 +105,9 @@ export default function App() {
 			  const allCoords = [];
 			  const allMarkers = [];
 
-			  for (let i = 0; i < predefinedLocations.length - 1; i++) {
-				const startLoc = predefinedLocations[i];
-				const destinationLoc = predefinedLocations[i + 1];
+			  for (let i = 0; i < coordsList.length - 1; i++) {
+				const startLoc = coordsList[i];
+				const destinationLoc = coordsList[i + 1];
 				const directions = await getDirections(
 				  `${startLoc.latitude},${startLoc.longitude}`,
 				  `${destinationLoc.latitude},${destinationLoc.longitude}`
@@ -115,7 +115,7 @@ export default function App() {
 				allCoords.push(directions);
 				allMarkers.push(startLoc);
 			  }
-			  allMarkers.push(predefinedLocations[predefinedLocations.length - 1]);
+			  allMarkers.push(coordsList[coordsList.length - 1]);
 
 			  setCoordsList(allCoords);
 			  setMarkers(allMarkers);
@@ -149,10 +149,12 @@ export default function App() {
 				pinColor={index === 0 ? 'green' : (index === markers.length - 1 ? 'red' : 'blue')}
 			/>
 			))}
-</MapView>
-			<TouchableOpacity style={styles.profileIconContainer}>
-                <FontAwesomeIcon icon={faGear} />			</TouchableOpacity>
-			<Navbar />
+        </MapView>
+
+        <TouchableOpacity style={styles.profileIconContainer}>
+            <FontAwesomeIcon icon={faGear} size={20}/>
+        </TouchableOpacity>
+        <Navbar />
 		</View>
 	);
 }
@@ -531,6 +533,9 @@ const styles = StyleSheet.create({
 		position: 'absolute',
 		top: 15,
 		right: 15,
+        backgroundColor: "white",
+        borderRadius: 25,
+        padding: 10,
 	},
 	profileIcon: {
 		width: 45,

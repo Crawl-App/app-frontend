@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     // width: "100%",
     height: 195,
     maxHeight: 300,
-    maxWidth: 600,
+    maxWidth: 750,
     width: "100%",
     borderRadius: 24,
     backgroundColor: "rgba(246,194,91,1)",
