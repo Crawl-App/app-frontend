@@ -1,7 +1,14 @@
-import React from "react";
-import { StyleSheet, Image, Text, View } from "react-native";
+import React, { useState } from "react";
+
+import { StyleSheet, Image, Text, View,TouchableOpacity } from "react-native";
 
 export default function Navbar() {
+    const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearch = () => {
+    alert(`Searching for: ${searchQuery}`);
+    // Here you can add functionality to handle the search query, such as API calls or navigation
+  };
   return (
     <View style={styles.navbar}>
       <View style={styles.buscar}>
@@ -30,65 +37,38 @@ export default function Navbar() {
       <View style={styles.icons}>
         <View style={styles.group372}>
           <View style={styles.group5}>
+          <TouchableOpacity onPress={() => alert('Start Crawl pressed')}>
             <Image
               style={styles.group4}
               source={{
                 uri: "https://firebasestorage.googleapis.com/v0/b/unify-v3-copy.appspot.com/o/r4hnhe1wgz-6%3A1684?alt=media&token=0acd0cf9-91f9-4338-8a53-3691f3b5ed49",
               }}
             />
-            <Text style={styles.startCrawl}>Start Crawl</Text>
+            </TouchableOpacity>
+            <Text style={styles.joinCrawl}>Start Crawl</Text>
           </View>
-          <View style={styles.group7}>
+          <View style={styles.group5}>
+          <TouchableOpacity onPress={() => alert('Start Crawl pressed')}>
             <Image
-              style={styles.group6}
+              style={styles.group4}
               source={{
                 uri: "https://firebasestorage.googleapis.com/v0/b/unify-v3-copy.appspot.com/o/r4hnhe1wgz-6%3A1679?alt=media&token=0ff5d747-7f04-4596-a80b-0918d0bd0c9f",
               }}
             />
+           </TouchableOpacity>
             <Text style={styles.joinCrawl}>Join Crawl</Text>
           </View>
-          <View style={styles.group11}>
-            <Image
-              style={styles.group10}
-              source={{
-                uri: "https://firebasestorage.googleapis.com/v0/b/unify-v3-copy.appspot.com/o/r4hnhe1wgz-6%3A1689?alt=media&token=33c91aa2-8c67-4fdc-a80d-7d1c741a8dd7",
-              }}
-            />
-            <Text style={styles.history}>History</Text>
-          </View>
         </View>
-        <Image
-          style={styles.image9}
-          source={{
-            uri: "https://firebasestorage.googleapis.com/v0/b/unify-v3-copy.appspot.com/o/r4hnhe1wgz-120%3A444?alt=media&token=4fa06243-46b3-4358-ad15-8fd6092b8922",
-          }}
-        />
       </View>
-      <Image
-        style={styles.image6}
-        source={{
-          uri: "https://firebasestorage.googleapis.com/v0/b/unify-v3-copy.appspot.com/o/r4hnhe1wgz-117%3A46?alt=media&token=00b51de2-003d-4f03-b937-224573a364bd",
-        }}
-      />
-      <Image
-        style={styles.image7}
-        source={{
-          uri: "https://firebasestorage.googleapis.com/v0/b/unify-v3-copy.appspot.com/o/r4hnhe1wgz-117%3A47?alt=media&token=7ba27de4-b83f-4067-be16-9b03cf3c7757",
-        }}
-      />
-      <Image
-        style={styles.image8}
-        source={{
-          uri: "https://firebasestorage.googleapis.com/v0/b/unify-v3-copy.appspot.com/o/r4hnhe1wgz-120%3A464?alt=media&token=311c6e31-b63b-4ca7-9e16-3cf9f39e6b18",
-        }}
-      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   navbar: {
-    position: "relative",
+    position: "absolute",
+    top: 500,
+    left:15,
     width: 358,
     height: 195,
     borderRadius: 24,
@@ -162,11 +142,6 @@ const styles = StyleSheet.create({
     height: 67,
     marginBottom: 8,
   },
-  startCrawl: {
-    color: "rgba(0,0,0,1)",
-    fontSize: 16,
-    textAlign: "center",
-  },
   group7: {
     flexDirection: "column",
     alignItems: "center",
@@ -185,25 +160,8 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     alignItems: "center",
   },
-  group10: {
-    width: 67,
-    height: 6
+  image: {
+    width: 24,
+    height: 24,
   }
-  ,
-  image9: {
-    width: 24,
-    height: 24,
-  },
-  image6: {
-    width: 24,
-    height: 24,
-  },
-  image7: {
-    width: 24,
-    height: 24,
-  },
-  image8: {
-    width: 24,
-    height: 24,
-  },
 });
