@@ -76,8 +76,8 @@ export default function App() {
         // Add more predefined locations here
     ];
 
-    const handleStartCrawl = (address,numberInput) => {
-        console.log(numberInput);
+    const handleStartCrawl = (address, numberInput) => {
+        console.log("Starting crawl");
         setShowRoute(true);
 
         /*Geocoder.from(address)
@@ -91,60 +91,78 @@ export default function App() {
 
 
         //search for the path given the starting location
-        /* const fetchPubCrawlRoute = async () => {
-        try {
-          const response = await fetch('https://crawl-nine.vercel.app/find_pub_crawl', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              coordinates: [predefinedLocations[0].latitude, predefinedLocations[0].longitude],
-              length: 2,
-              use_current_loc: false,
-            }),
-          });
+        const fetchPubCrawlRoute = async () => {
+            try {
+                const response = await fetch('https://crawl-nine.vercel.app/find_pub_crawl', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        coordinates: [predefinedLocations[0].latitude, predefinedLocations[0].longitude],
+                        length: 2,
+                        use_current_loc: false,
+                    }),
+                });
 
-          const data = await response.json();
+                const data = await response.json();
 
-          const routeCoordinates = data.route[0].map(loc => ({
-            latitude: loc[1],
-            longitude: loc[2],
-          }));
+                const routeCoordinates = data.route[0].map(loc => ({
+                    latitude: loc[1],
+                    longitude: loc[2],
+                }));
 
-          console.log(routeCoordinates);
-          setCoordsList(routeCoordinates);
-          setMarkers(routeCoordinates);
-            console.log("Updated Coords List:", coordsList);
-          console.log(coordsList);
-          console.log(markers);
-        } catch (error) {
-          console.error("Error fetching route:", error);
-        }
-      };
-      fetchPubCrawlRoute();
-      */
+                setCoordsList(routeCoordinates);
+                setMarkers(routeCoordinates);
+                console.log("Coords", coordsList);
+                console.log("Markers", markers);
+            } catch (error) {
+                console.error("Error fetching route:", error);
+            }
+        };
+        fetchPubCrawlRoute();
 
         //get the routes between the locations
-        const fetchAllDirections = async () => {
-            const allCoords = [];
-            const allMarkers = [];
-
-            for (let i = 0; i < coordsList.length - 1; i++) {
-                const startLoc = coordsList[i];
-                const destinationLoc = coordsList[i + 1];
-                const directions = await getDirections(
-                    `${startLoc.latitude},${startLoc.longitude}`,
-                    `${destinationLoc.latitude},${destinationLoc.longitude}`
-                );
-                setCoordsList(allCoords);
-                setMarkers(allMarkers);
-            }
-            allMarkers.push(coordsList[coordsList.length - 1]);
-
-        };
-        fetchAllDirections();
+        // const fetchAllDirections = async () => {
+        //     for (let i = 0; i < coordsList.length - 1; i++) {
+        //         const startLoc = coordsList[i];
+        //         const destinationLoc = coordsList[i + 1];
+        //         const directions = await getDirections(
+        //             `${startLoc.latitude},${startLoc.longitude}`,
+        //             `${destinationLoc.latitude},${destinationLoc.longitude}`
+        //         );
+        //         // setCoordsList(allCoords);
+        //         // setMarkers(allMarkers);
+        //         console.log("Markers Festches: ", markers)
+        //         console.log("Coords Directions: ", directions)
+        //     }
+        // };
+        //
+        // fetchAllDirections();
     };
+
+    const [markers2, setMarkers2] = useState([
+        { id: 1, latitude: 37.78825, longitude: -122.4324 },
+        { id: 2, latitude: 37.78845, longitude: -122.4322 },
+        { id: 3, latitude: 37.78865, longitude: -122.4320 }
+    ]);
+
+    // Function to delete a marker by its ID
+    const deleteMarker = (id) => {
+        setMarkers((prevMarkers) => prevMarkers.filter(marker => marker.id !== id));
+    };
+
+    // Function to add a new marker (for demonstration purposes)
+    const addMarker = () => {
+        const newMarker = {
+            id: markers.length + 1,
+            latitude: 37.78885,
+            longitude: -122.4318,
+        };
+        setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
+    };
+
+    useEffect(() => console.log("Use Effect Markers", markers), [markers]);
 
     //show the map
     return (
@@ -174,6 +192,7 @@ export default function App() {
                         pinColor={index === 0 ? 'green' : (index === markers.length - 1 ? 'red' : 'blue')}
                     />
                 ))}
+
             </MapView>
                 <TouchableOpacity style={styles.profileIconContainer} onPress={() => router.push('/settings')}>
                     <FontAwesomeIcon icon={faGear} size={20}/>
