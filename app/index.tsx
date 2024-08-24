@@ -31,13 +31,13 @@ const getDirections = async (startLoc: string, destinationLoc: string) => {
   }
 };
 export default function App() {
-			let coordsList: any[] = [];  // Just a variable, no useState needed
-			let markers: any[] = [];  // Just a variable, no useState needed
+  const [coordsList, setCoordsList] = useState([]);  // Define coordsList state
+  const [markers, setMarkers] = useState([]);  // Define markers state
 		  const [showRoute, setShowRoute] = useState(false); // State to control visibility when pressing the button
 
 		  //both are to set up the initial location
 		const initialLocation = {latitude: 37.771707, longitude: -122.4053769};
-		const [myLocation, setMyLocation] = useState(initialLocation);
+		const [myLocation, setMyLocation] = useState(null);
 
 		/** might not be useful because we can get the location from the google autocomplete */
 		  useEffect(() => {
@@ -74,6 +74,7 @@ export default function App() {
 
 	  //starting location handling 
 	  const handleButtonPress = (address,numberInput) => {
+    console.log(numberInput);
 		setShowRoute(true);
 	  
 		/*Geocoder.from(address)
@@ -109,9 +110,9 @@ export default function App() {
 		  }));
 		  
 		  console.log(routeCoordinates);
-		  coordsList = routeCoordinates;
+		  setCoordsList(routeCoordinates);
+		  setMarkers(routeCoordinates);
 			console.log("Updated Coords List:", coordsList);
-		  markers = routeCoordinates;
 		  console.log(coordsList);
 		  console.log(markers);
 		} catch (error) {
@@ -122,7 +123,6 @@ export default function App() {
 	  */
 	  
 	//get the routes between the locations
-			coordsList = predefinedLocations;
 			const fetchAllDirections = async () => {
 			  const allCoords = [];
 			  const allMarkers = [];
@@ -134,8 +134,8 @@ export default function App() {
 				  `${startLoc.latitude},${startLoc.longitude}`,
 				  `${destinationLoc.latitude},${destinationLoc.longitude}`
 				);
-				allCoords.push(directions);
-				allMarkers.push(startLoc);
+				setCoordsList(allCoords);
+		  setMarkers(allMarkers);
 			  }
 			  allMarkers.push(coordsList[coordsList.length - 1]);
 
@@ -146,7 +146,7 @@ export default function App() {
 		//show the map
 	return (
      <View style={{ flex: 1 }}>
-          <MapView style={StyleSheet.absoluteFill} customMapStyle={mapStyle} >
+          <MapView style={StyleSheet.absoluteFill} customMapStyle={mapStyle} initialRegion={{latitude: myLocation.latitude,longitude:myLocation.longitude,latitudeDelta:0.01,longitudeDelta:0.01}}>
             
           {coordsList.map((coords, index) => {
   // Ensure you only create a Polyline if there's a next coordinate to connect to
@@ -170,7 +170,16 @@ export default function App() {
               coordinate={marker}
               pinColor={index === 0 ? 'green' : (index === markers.length - 1 ? 'red' : 'blue')}
           />
+          
           ))}
+          { myLocation.latitude && myLocation.longitude &&
+  <Marker
+    coordinate={{
+      latitude: myLocation.latitude,
+      longitude: myLocation.longitude
+    }}
+  />
+}
 </MapView>
           <TouchableOpacity style={styles.profileIconContainer}>
               <Image
