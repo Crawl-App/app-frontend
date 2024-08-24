@@ -6,6 +6,7 @@ import Navbar from "./Navbar"; // Ensure this path is correct
 import {decode} from "@mapbox/polyline"; //please install this package before running!
 import * as Location from 'expo-location';
 import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
+import { useRouter } from 'expo-router';
 
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faGear } from '@fortawesome/free-solid-svg-icons/faGear'
@@ -32,7 +33,9 @@ import { faGear } from '@fortawesome/free-solid-svg-icons/faGear'
 	  return error;
 	}
   };
+
 export default function App() {
+        const router = useRouter(); // Get the router instance
 
 		const [coordsList, setCoordsList] = useState([]);  // Define coordsList state
 		const [markers, setMarkers] = useState([]);  // Define markers state
@@ -151,7 +154,7 @@ export default function App() {
 			))}
         </MapView>
 
-        <TouchableOpacity style={styles.profileIconContainer}>
+        <TouchableOpacity style={styles.profileIconContainer} onPress={() => router.push('/settings')}>
             <FontAwesomeIcon icon={faGear} size={20}/>
         </TouchableOpacity>
         <Navbar />
