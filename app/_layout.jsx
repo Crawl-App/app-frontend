@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React from 'react';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
@@ -38,3 +39,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+=======
+import { Stack } from "expo-router/stack";
+
+export default function Layout() {
+    return (
+        <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        </Stack>
+    );
+}
+>>>>>>> d3803b8862b5d0dbb68a3cba617b4385f3c4c132
