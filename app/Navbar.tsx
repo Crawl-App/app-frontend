@@ -1,6 +1,9 @@
 import React, { useState } from "react";
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { faRoute } from '@fortawesome/free-solid-svg-icons/faRoute'
+import { faUserGroup } from '@fortawesome/free-solid-svg-icons/faUserGroup'
 
-import { StyleSheet, Image, Text, View,TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, Animated, StyleSheet } from 'react-native';
 
 export default function Navbar() {
     const [searchQuery, setSearchQuery] = useState("");
@@ -10,70 +13,71 @@ export default function Navbar() {
     // Here you can add functionality to handle the search query, such as API calls or navigation
   };
   return (
+    <View style={styles.navbarContainer}>
     <View style={styles.navbar}>
-      <View style={styles.buscar}>
-        <View style={styles.group2}>
-          <View style={styles.search}></View>
-          <Text style={styles.startingLocation}>Starting location</Text>
-        </View>
-        <View style={styles.agora}>
-          <View style={styles.group1}>
-            <Image
-              style={styles.svgexport11}
-              source={{
-                uri: "https://firebasestorage.googleapis.com/v0/b/unify-v3-copy.appspot.com/o/r4hnhe1wgz-6%3A1667?alt=media&token=940b24d0-1f40-4fe2-9bed-b248e768e871",
-              }}
-            />
-            <Text style={styles.now}>Now</Text>
-            <Image
-              style={styles.altchevronDown}
-              source={{
-                uri: "https://firebasestorage.googleapis.com/v0/b/unify-v3-copy.appspot.com/o/r4hnhe1wgz-6%3A1675?alt=media&token=7a5b16a2-eefb-4347-aded-dc223f9038ce",
-              }}
-            />
-          </View>
-        </View>
-      </View>
       <View style={styles.icons}>
         <View style={styles.group372}>
-          <View style={styles.group5}>
-          <TouchableOpacity onPress={() => alert('Start Crawl pressed')}>
-            <Image
-              style={styles.group4}
-              source={{
-                uri: "https://firebasestorage.googleapis.com/v0/b/unify-v3-copy.appspot.com/o/r4hnhe1wgz-6%3A1684?alt=media&token=0acd0cf9-91f9-4338-8a53-3691f3b5ed49",
-              }}
-            />
-            </TouchableOpacity>
+          <TouchableOpacity style={styles.mainButton} onPress={() => alert('Start Crawl pressed')}>
+            <FontAwesomeIcon style={styles.mainButtonIcons} size={25} icon={faRoute} />
             <Text style={styles.joinCrawl}>Start Crawl</Text>
-          </View>
-          <View style={styles.group5}>
-          <TouchableOpacity onPress={() => alert('Start Crawl pressed')}>
-            <Image
-              style={styles.group4}
-              source={{
-                uri: "https://firebasestorage.googleapis.com/v0/b/unify-v3-copy.appspot.com/o/r4hnhe1wgz-6%3A1679?alt=media&token=0ff5d747-7f04-4596-a80b-0918d0bd0c9f",
-              }}
-            />
-           </TouchableOpacity>
+            </TouchableOpacity>
+          <TouchableOpacity style={styles.mainButton} onPress={() => alert('Start Crawl pressed')}>
+            <FontAwesomeIcon style={styles.mainButtonIcons} size={25} icon={faUserGroup} />
             <Text style={styles.joinCrawl}>Join Crawl</Text>
-          </View>
+           </TouchableOpacity>
         </View>
       </View>
     </View>
+    </View>
+
   );
 }
+      // <View style={styles.buscar}>
+      //   <View style={styles.group2}>
+      //     <View style={styles.search}></View>
+      //     // <Text style={styles.startingLocation}>Starting location</Text>
+      //   </View>
+      //   <View style={styles.agora}>
+      //     <View style={styles.group1}>
+      //       <ImagejustifyContent: 'center', alignItems: 'center'}
+      //         style={styles.svgexport11}
+      //         source={{
+      //           uri: "https://firebasestorage.googleapis.com/v0/b/unify-v3-copy.appspot.com/o/r4hnhe1wgz-6%3A1667?alt=media&token=940b24d0-1f40-4fe2-9bed-b248e768e871",
+      //         }}
+      //       />
+      //       <Text style={styles.now}>Now</Text>
+      //       <Image
+      //         style={styles.altchevronDown}
+      //         source={{
+      //           uri: "https://firebasestorage.googleapis.com/v0/b/unify-v3-copy.appspot.com/o/r4hnhe1wgz-6%3A1675?alt=media&token=7a5b16a2-eefb-4347-aded-dc223f9038ce",
+      //         }}
+      //       />
+      //     </View>
+      //   </View>
+      // </View>
 
 const styles = StyleSheet.create({
-  navbar: {
+  navbarContainer: {
     position: "absolute",
     bottom: 0,
-    left:0,
+    // padding: 15,
+    paddingLeft: 15,
+    paddingRight: 15,
+    paddingVertical: 30,
     width: "100%",
+    maxHeight: "35%",
+    alignItems: 'center',
+  },
+  navbar: {
+    // width: "100%",
     height: 195,
+    maxHeight: 300,
+    maxWidth: 600,
+    width: "100%",
     borderRadius: 24,
     backgroundColor: "rgba(246,194,91,1)",
-    padding: 16,
+    padding: 15,
+    justifyContent: "flex-end",
   },
   buscar: {
     flexDirection: "row",
@@ -137,10 +141,25 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     alignItems: "center",
   },
-  group4: {
-    width: 67,
-    height: 67,
-    marginBottom: 8,
+  mainButton: {
+    paddingHorizontal: 10,
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    width: "45%",
+    maxWidth: 200,
+    minHeight: 70,
+    borderRadius: 25,
+    backgroundColor: "white",
+    shadowColor: '#171717',
+    shadowOffset: {width: -2, height: 4},
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+
+
+  },
+  mainButtonIcons: {
+    paddingRight: 40,
   },
   group7: {
     flexDirection: "column",

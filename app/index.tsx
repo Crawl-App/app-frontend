@@ -3,7 +3,6 @@ import MapView,{ Polyline } from 'react-native-maps';
 import { Marker } from "react-native-maps";
 import { StyleSheet, View, Image, TouchableOpacity } from 'react-native';
 import Navbar from "./Navbar"; // Ensure this path is correct
-import axios from 'axios';
 import {decode} from "@mapbox/polyline"; //please install this package before running!
 import * as Location from 'expo-location';
 import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
@@ -18,7 +17,7 @@ import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 	  );
 	  let respJson = await resp.json();
 	  let points = decode(respJson.routes[0].overview_polyline.points);
-	  console.log(points);
+	  // console.log(points);
 	  let coords = points.map((point, index) => {
 		return {
 		  latitude: point[0],
@@ -528,12 +527,12 @@ const mapStyle =
 const styles = StyleSheet.create({
 	profileIconContainer: {
 		position: 'absolute',
-		top: 60,
-		right: 30,
+		top: 15,
+		right: 15,
 	},
 	profileIcon: {
-		width: 60,
-		height: 60,
+		width: 45,
+		height: 45,
 		borderRadius: 25, // Makes the icon circular
 		borderWidth: 2,
 		borderColor: '#fff', // Optional: add a border for better visibility
