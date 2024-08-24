@@ -41,7 +41,7 @@ axios.get(`https://maps.googleapis.com/maps/api/directions/json?origin=${origin}
 	}
   };
 export default function App() {
-	const mapStyle = 
+	const mapStyle =
 		[
 			{
 			  "elementType": "geometry",
@@ -408,7 +408,7 @@ export default function App() {
 				}
 			  ]
 			}
-		   
+
 	  ]
 	  const [coords, setCoords] = useState([]);
 	  const tokyoRegion = {
@@ -431,9 +431,9 @@ export default function App() {
 		  .catch(err => console.log("Something went wrong"));
 	  }, []);
 	return (
-		
+
 		<View style={{ flex: 1 }}>
-			
+
 			<MapView style={StyleSheet.absoluteFill} customMapStyle={mapStyle} initialRegion={tokyoRegion}>
 			  <Polyline
         coordinates={coords} //specify our coordinates
@@ -448,7 +448,7 @@ export default function App() {
 				<Image
 					source={{ uri: 'https://firebasestorage.googleapis.com/v0/b/unify-v3-copy.appspot.com/o/c9nobwyzi35-6%3A1699?alt=media&token=a54c2b0c-4c49-4daf-92d8-fb10c27bcfb6' }} // Replace with your profile image URL
 					style={styles.profileIcon}
-				/> 
+				/>
 			</TouchableOpacity>
 			<Navbar />
 		</View>
