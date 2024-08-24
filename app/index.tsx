@@ -6,38 +6,44 @@ import Navbar from "./Navbar"; // Ensure this path is correct
 import {decode} from "@mapbox/polyline"; //please install this package before running!
 import * as Location from 'expo-location';
 import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
+import Geocoder from 'react-native-geocoding';
 
-
-  const getDirections = async (startLoc, destinationLoc) => {
-	try {
-	  const KEY = "AIzaSyAUWNMB5SpuGaA_PdfIW4VSbWxsUWvYCiI" //put your API key here.
-	  //otherwise, you'll have an 'unauthorized' error.
-	  let resp = await fetch(
-		`https://maps.googleapis.com/maps/api/directions/json?origin=${startLoc}&destination=${destinationLoc}&key=${KEY}`
-	  );
-	  let respJson = await resp.json();
-	  let points = decode(respJson.routes[0].overview_polyline.points);
-	  // console.log(points);
-	  let coords = points.map((point, index) => {
-		return {
-		  latitude: point[0],
-		  longitude: point[1]
-		};
-	  });
-	  return coords;
-	} catch (error) {
-	  return error;
-	}
-  };
+//works, give the route given the start and end location
+const getDirections = async (startLoc: string, destinationLoc: string) => {
+  try {
+    const KEY = "AIzaSyAUWNMB5SpuGaA_PdfIW4VSbWxsUWvYCiI" //put your API key here.
+    //otherwise, you'll have an 'unauthorized' error.
+    let resp = await fetch(
+      `https://maps.googleapis.com/maps/api/directions/json?origin=${startLoc}&destination=${destinationLoc}&key=${KEY}`
+    );
+    let respJson = await resp.json();
+    let points = decode(respJson.routes[0].overview_polyline.points);
+    // console.log(points);
+    let coords = points.map((point, index) => {
+      return {
+        latitude: point[0],
+        longitude: point[1]
+      };
+    });
+    return coords;
+  } catch (error) {
+    return error;
+  }
+};
 export default function App() {
-	
-		const [coordsList, setCoordsList] = useState([]);  // Define coordsList state
-		const [markers, setMarkers] = useState([]);  // Define markers state
+			let coordsList: any[] = [];  // Just a variable, no useState needed
+			let markers: any[] = [];  // Just a variable, no useState needed
+		  const [showRoute, setShowRoute] = useState(false); // State to control visibility when pressing the button
+
+		  //both are to set up the initial location
 		const initialLocation = {latitude: 37.771707, longitude: -122.4053769};
 		const [myLocation, setMyLocation] = useState(initialLocation);
+
+		/** might not be useful because we can get the location from the google autocomplete */
 		  useEffect(() => {
 			  _getLocation();
 		  }, []);
+	
 		  
 		  const _getLocation = async () => {
 			  try {
@@ -52,20 +58,36 @@ export default function App() {
 			  console.warn(err);
 			  }
 		  };
+		  /**__________________________________________________________________ */
 
+
+//starting location
 	  const predefinedLocations = [
 		//Tokyo
 		{ latitude: 35.652832, longitude: 139.839478 },
-		//Osak
+		//Osaka
+		{ latitude: 34.693737, longitude: 135.502165 },
 		
 
 		// Add more predefined locations here
 	  ];
-	  useEffect(() => {
-		fetchPubCrawlRoute();
-	  }, []);
+
+	  //starting location handling 
+	  const handleButtonPress = (address,numberInput) => {
+		setShowRoute(true);
+	  
+		/*Geocoder.from(address)
+		.then(json => {
+			var location = json.results[0].geometry.location;
+			console.log(location);
+			predefinedLocations.pop();
+			predefinedLocations.push({latitude: location.lat, longitude: location.lng});
+		})
+		.catch(error => console.warn(error));*/
 	
-	  const fetchPubCrawlRoute = async () => {
+
+//search for the path given the starting location
+	 /* const fetchPubCrawlRoute = async () => {
 		try {
 		  const response = await fetch('https://crawl-nine.vercel.app/find_pub_crawl', {
 			method: 'POST',
@@ -74,34 +96,40 @@ export default function App() {
 			},
 			body: JSON.stringify({
 			  coordinates: [predefinedLocations[0].latitude, predefinedLocations[0].longitude],
-			  length: 6,
+			  length: 2,
 			  use_current_loc: false,
 			}),
 		  });
 	
 		  const data = await response.json();
 	
-		  const routeCoordinates = data.route.map(loc => ({
+		  const routeCoordinates = data.route[0].map(loc => ({
 			latitude: loc[1],
 			longitude: loc[2],
 		  }));
-	
-		  setCoordsList(routeCoordinates);
-		  setMarkers(routeCoordinates);
+		  
+		  console.log(routeCoordinates);
+		  coordsList = routeCoordinates;
+			console.log("Updated Coords List:", coordsList);
+		  markers = routeCoordinates;
+		  console.log(coordsList);
+		  console.log(markers);
 		} catch (error) {
 		  console.error("Error fetching route:", error);
 		}
 	  };
-	
+	  fetchPubCrawlRoute();
+	  */
 	  
-		useEffect(() => {
+	//get the routes between the locations
+			coordsList = predefinedLocations;
 			const fetchAllDirections = async () => {
 			  const allCoords = [];
 			  const allMarkers = [];
 		
-			  for (let i = 0; i < predefinedLocations.length - 1; i++) {
-				const startLoc = predefinedLocations[i];
-				const destinationLoc = predefinedLocations[i + 1];
+			  for (let i = 0; i < coordsList.length - 1; i++) {
+				const startLoc = coordsList[i];
+				const destinationLoc = coordsList[i + 1];
 				const directions = await getDirections(
 				  `${startLoc.latitude},${startLoc.longitude}`,
 				  `${destinationLoc.latitude},${destinationLoc.longitude}`
@@ -109,50 +137,50 @@ export default function App() {
 				allCoords.push(directions);
 				allMarkers.push(startLoc);
 			  }
-			  allMarkers.push(predefinedLocations[predefinedLocations.length - 1]);
+			  allMarkers.push(coordsList[coordsList.length - 1]);
 
-			  setCoordsList(allCoords);
-			  setMarkers(allMarkers);
 			};
 			fetchAllDirections();
-		}, []);
+		};
 	  
-		
-	  
+		//show the map
 	return (
+     <View style={{ flex: 1 }}>
+          <MapView style={StyleSheet.absoluteFill} customMapStyle={mapStyle} >
+            
+          {coordsList.map((coords, index) => {
+  // Ensure you only create a Polyline if there's a next coordinate to connect to
+  if (index < coordsList.length - 1) {
+    const segment = [coords, coordsList[index + 1]]; // Create a segment from this point to the next point
+    return (
+      <Polyline
+          key={`polyline-${index}`}
+          coordinates={segment} // Pass the segment (two points) as coordinates
+          strokeColor="red"
+          strokeWidth={4}
+        />
+    );
+  }
+  return null; // No polyline for the last point
+})}
 
-		<View style={{ flex: 1 }}>
-
-			<MapView style={StyleSheet.absoluteFill} customMapStyle={mapStyle} >
-			  
-
-      
-				{coordsList.map((coords, index) => (
-			<Polyline
-				key={`polyline-${index}`}
-				coordinates={coords}
-				strokeColor="red"
-				strokeWidth={4}
-			/>
-			))}
-
-			{markers.map((marker, index) => (
-			<Marker
-				key={`marker-${index}`}
-				coordinate={marker}
-				pinColor={index === 0 ? 'green' : (index === markers.length - 1 ? 'red' : 'blue')}
-			/>
-			))}
+          {markers.map((marker, index) => (
+          <Marker
+              key={`marker-${index}`}
+              coordinate={marker}
+              pinColor={index === 0 ? 'green' : (index === markers.length - 1 ? 'red' : 'blue')}
+          />
+          ))}
 </MapView>
-			<TouchableOpacity style={styles.profileIconContainer}>
-				<Image
-					source={{ uri: 'https://firebasestorage.googleapis.com/v0/b/unify-v3-copy.appspot.com/o/c9nobwyzi35-6%3A1699?alt=media&token=a54c2b0c-4c49-4daf-92d8-fb10c27bcfb6' }} // Replace with your profile image URL
-					style={styles.profileIcon}
-				/>
-			</TouchableOpacity>
-			<Navbar />
-		</View>
-	);
+          <TouchableOpacity style={styles.profileIconContainer}>
+              <Image
+                  source={{ uri: 'https://firebasestorage.googleapis.com/v0/b/unify-v3-copy.appspot.com/o/c9nobwyzi35-6%3A1699?alt=media&token=a54c2b0c-4c49-4daf-92d8-fb10c27bcfb6' }} // Replace with your profile image URL
+                  style={styles.profileIcon}
+              />
+          </TouchableOpacity>
+          <Navbar onPress={handleButtonPress} />
+        </View>
+    );
 }
 const mapStyle =
 		[

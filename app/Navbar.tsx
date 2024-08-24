@@ -2,25 +2,48 @@ import React, { useState } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faRoute } from '@fortawesome/free-solid-svg-icons/faRoute'
 import { faUserGroup } from '@fortawesome/free-solid-svg-icons/faUserGroup'
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import { View, Text, TouchableOpacity, Animated, StyleSheet, TextInput} from 'react-native';
 
-import { View, Text, TouchableOpacity, Animated, StyleSheet } from 'react-native';
-
-export default function Navbar() {
+export default function Navbar({onPress}: {onPress: (searchQuery,numberInput) => void}) {
     const [searchQuery, setSearchQuery] = useState("");
-
-  const handleSearch = () => {
-    alert(`Searching for: ${searchQuery}`);
-    // Here you can add functionality to handle the search query, such as API calls or navigation
-  };
+    const [numberInput, setNumberInput] = useState("");
+  
   return (
     <View style={styles.navbarContainer}>
     <View style={styles.navbar}>
+
+    <GooglePlacesAutocomplete 
+              placeholder='Search'
+              onPress={(data, details = null) => {
+                // 'details' is provided when fetchDetails = true
+                console.log(data, details);
+                setSearchQuery(data.id);
+              }}
+              query={{
+                key: 'AIzaSyAUWNMB5SpuGaA_PdfIW4VSbWxsUWvYCiI',
+                language: 'en',
+              }}
+              currentLocation={false}
+            
+            />
+            
       <View style={styles.icons}>
+        
         <View style={styles.group372}>
-          <TouchableOpacity style={styles.mainButton} onPress={() => alert('Start Crawl pressed')}>
+              
+          <TouchableOpacity style={styles.mainButton} onPress={() => onPress(searchQuery,numberInput)}>
             <FontAwesomeIcon style={styles.mainButtonIcons} size={25} icon={faRoute} />
             <Text style={styles.joinCrawl}>Start Crawl</Text>
             </TouchableOpacity>
+          
+            <TextInput
+                    style={styles.inputBox}
+                    placeholder="0"
+                    keyboardType="numeric"
+                    value={numberInput}
+                    onChangeText={setNumberInput}
+                />
           <TouchableOpacity style={styles.mainButton} onPress={() => alert('Start Crawl pressed')}>
             <FontAwesomeIcon style={styles.mainButtonIcons} size={25} icon={faUserGroup} />
             <Text style={styles.joinCrawl}>Join Crawl</Text>
@@ -65,7 +88,7 @@ const styles = StyleSheet.create({
     paddingRight: 15,
     paddingVertical: 30,
     width: "100%",
-    maxHeight: "35%",
+    maxHeight: "60%",
     alignItems: 'center',
   },
   navbar: {
@@ -103,6 +126,16 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     fontWeight: "500",
   },
+  inputBox: {
+    width: 50,
+    height: 40,
+    marginLeft: 10,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    padding: 10,
+    textAlign: 'center',
+},
   agora: {
     flexDirection: "row",
     alignItems: "center",
