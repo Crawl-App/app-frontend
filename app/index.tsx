@@ -3,7 +3,6 @@ import MapView,{ Polyline } from 'react-native-maps';
 import { Marker } from "react-native-maps";
 import { StyleSheet, View, Image, TouchableOpacity } from 'react-native';
 import Navbar from "./Navbar"; // Ensure this path is correct
-import axios from 'axios';
 import {decode} from "@mapbox/polyline"; //please install this package before running!
 
 
@@ -429,7 +428,7 @@ export default function App() {
         strokeWidth={3}
 
       />
-			<Marker coordinate={tokyoRegion} image={{uri:'https://imgur.com/a/pKaDmKM'}} /> 
+			<Marker coordinate={tokyoRegion} image={{uri:'https://imgur.com/a/pKaDmKM'}} />
 			<Marker coordinate={chibaRegion} pinColor='yellow' />
 </MapView>
 			<TouchableOpacity style={styles.profileIconContainer}>
@@ -446,12 +445,12 @@ export default function App() {
 const styles = StyleSheet.create({
 	profileIconContainer: {
 		position: 'absolute',
-		top: 60,
-		right: 30,
+		top: 15,
+		right: 15,
 	},
 	profileIcon: {
-		width: 60,
-		height: 60,
+		width: 45,
+		height: 45,
 		borderRadius: 25, // Makes the icon circular
 		borderWidth: 2,
 		borderColor: '#fff', // Optional: add a border for better visibility
