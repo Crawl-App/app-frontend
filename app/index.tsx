@@ -6,18 +6,6 @@ import Navbar from "./Navbar"; // Ensure this path is correct
 import axios from 'axios';
 import {decode} from "@mapbox/polyline"; //please install this package before running!
 
-const API_KEY ="AIzaSyAUWNMB5SpuGaA_PdfIW4VSbWxsUWvYCiI";
-
-const origin = 'New York City';
-const destination = 'San Francisco';
-
-axios.get(`https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination}&key=${API_KEY}`)
-  .then(res => {
-    console.log(res.data);
-  })
-  .catch(err => {
-    console.log(err);
-  });
 
   const getDirections = async (startLoc, destinationLoc) => {
 	try {
@@ -437,7 +425,7 @@ export default function App() {
 			<MapView style={StyleSheet.absoluteFill} customMapStyle={mapStyle} initialRegion={tokyoRegion}>
 			  <Polyline
         coordinates={coords} //specify our coordinates
-        strokeColor={"#000"}
+        strokeColor={"blue"}
         strokeWidth={3}
 
       />
