@@ -67,9 +67,9 @@ export default function Navbar() {
 const styles = StyleSheet.create({
   navbar: {
     position: "absolute",
-    top: 500,
-    left:15,
-    width: 358,
+    bottom: 0,
+    left:0,
+    width: "100%",
     height: 195,
     borderRadius: 24,
     backgroundColor: "rgba(246,194,91,1)",
