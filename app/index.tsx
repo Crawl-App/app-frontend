@@ -7,6 +7,9 @@ import {decode} from "@mapbox/polyline"; //please install this package before ru
 import * as Location from 'expo-location';
 import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { faGear } from '@fortawesome/free-solid-svg-icons/faGear'
+
 
   const getDirections = async (startLoc, destinationLoc) => {
 	try {
@@ -30,7 +33,7 @@ import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 	}
   };
 export default function App() {
-	
+
 		const [coordsList, setCoordsList] = useState([]);  // Define coordsList state
 		const [markers, setMarkers] = useState([]);  // Define markers state
 		const initialLocation = {latitude: 37.771707, longitude: -122.4053769};
@@ -38,7 +41,7 @@ export default function App() {
 		  useEffect(() => {
 			  _getLocation();
 		  }, []);
-		  
+
 		  const _getLocation = async () => {
 			  try {
 			  let { status } = await Location.requestForegroundPermissionsAsync();
@@ -57,14 +60,14 @@ export default function App() {
 		//Tokyo
 		{ latitude: 35.652832, longitude: 139.839478 },
 		//Osak
-		
+
 
 		// Add more predefined locations here
 	  ];
 	  useEffect(() => {
 		fetchPubCrawlRoute();
 	  }, []);
-	
+
 	  const fetchPubCrawlRoute = async () => {
 		try {
 		  const response = await fetch('https://crawl-nine.vercel.app/find_pub_crawl', {
@@ -78,27 +81,30 @@ export default function App() {
 			  use_current_loc: false,
 			}),
 		  });
-	
+
 		  const data = await response.json();
-	
+          console.log(data);
+
 		  const routeCoordinates = data.route.map(loc => ({
 			latitude: loc[1],
 			longitude: loc[2],
 		  }));
-	
+
+          console.log(routeCoordinates);
+
 		  setCoordsList(routeCoordinates);
 		  setMarkers(routeCoordinates);
 		} catch (error) {
 		  console.error("Error fetching route:", error);
 		}
 	  };
-	
-	  
+
+
 		useEffect(() => {
 			const fetchAllDirections = async () => {
 			  const allCoords = [];
 			  const allMarkers = [];
-		
+
 			  for (let i = 0; i < predefinedLocations.length - 1; i++) {
 				const startLoc = predefinedLocations[i];
 				const destinationLoc = predefinedLocations[i + 1];
@@ -116,17 +122,17 @@ export default function App() {
 			};
 			fetchAllDirections();
 		}, []);
-	  
-		
-	  
+
+
+
 	return (
 
 		<View style={{ flex: 1 }}>
 
 			<MapView style={StyleSheet.absoluteFill} customMapStyle={mapStyle} >
-			  
 
-      
+
+
 				{coordsList.map((coords, index) => (
 			<Polyline
 				key={`polyline-${index}`}
@@ -145,11 +151,7 @@ export default function App() {
 			))}
 </MapView>
 			<TouchableOpacity style={styles.profileIconContainer}>
-				<Image
-					source={{ uri: 'https://firebasestorage.googleapis.com/v0/b/unify-v3-copy.appspot.com/o/c9nobwyzi35-6%3A1699?alt=media&token=a54c2b0c-4c49-4daf-92d8-fb10c27bcfb6' }} // Replace with your profile image URL
-					style={styles.profileIcon}
-				/>
-			</TouchableOpacity>
+                <FontAwesomeIcon icon={faGear} />			</TouchableOpacity>
 			<Navbar />
 		</View>
 	);
