@@ -5,6 +5,8 @@ import { StyleSheet, View, Image, TouchableOpacity } from 'react-native';
 import Navbar from "./Navbar"; // Ensure this path is correct
 import axios from 'axios';
 import {decode} from "@mapbox/polyline"; //please install this package before running!
+import * as Location from 'expo-location';
+import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 
 
   const getDirections = async (startLoc, destinationLoc) => {
@@ -29,7 +31,131 @@ import {decode} from "@mapbox/polyline"; //please install this package before ru
 	}
   };
 export default function App() {
-	const mapStyle =
+	
+		const [coordsList, setCoordsList] = useState([]);  // Define coordsList state
+		const [markers, setMarkers] = useState([]);  // Define markers state
+		const initialLocation = {latitude: 37.771707, longitude: -122.4053769};
+		const [myLocation, setMyLocation] = useState(initialLocation);
+		  useEffect(() => {
+			  _getLocation();
+		  }, []);
+		  
+		  const _getLocation = async () => {
+			  try {
+			  let { status } = await Location.requestForegroundPermissionsAsync();
+			  if (status !== 'granted') {
+				  console.log('Permission to access location was denied');
+				  return;
+			  }
+			  let location = await Location.getCurrentPositionAsync({});
+			  setMyLocation(location.coords);
+			  } catch (err) {
+			  console.warn(err);
+			  }
+		  };
+
+	  const predefinedLocations = [
+		//Tokyo
+		{ latitude: 35.652832, longitude: 139.839478 },
+		//Osak
+		
+
+		// Add more predefined locations here
+	  ];
+	  useEffect(() => {
+		fetchPubCrawlRoute();
+	  }, []);
+	
+	  const fetchPubCrawlRoute = async () => {
+		try {
+		  const response = await fetch('https://crawl-nine.vercel.app/find_pub_crawl', {
+			method: 'POST',
+			headers: {
+			  'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+			  coordinates: [predefinedLocations[0].latitude, predefinedLocations[0].longitude],
+			  length: 6,
+			  use_current_loc: false,
+			}),
+		  });
+	
+		  const data = await response.json();
+	
+		  const routeCoordinates = data.route.map(loc => ({
+			latitude: loc[1],
+			longitude: loc[2],
+		  }));
+	
+		  setCoordsList(routeCoordinates);
+		  setMarkers(routeCoordinates);
+		} catch (error) {
+		  console.error("Error fetching route:", error);
+		}
+	  };
+	
+	  
+		useEffect(() => {
+			const fetchAllDirections = async () => {
+			  const allCoords = [];
+			  const allMarkers = [];
+		
+			  for (let i = 0; i < predefinedLocations.length - 1; i++) {
+				const startLoc = predefinedLocations[i];
+				const destinationLoc = predefinedLocations[i + 1];
+				const directions = await getDirections(
+				  `${startLoc.latitude},${startLoc.longitude}`,
+				  `${destinationLoc.latitude},${destinationLoc.longitude}`
+				);
+				allCoords.push(directions);
+				allMarkers.push(startLoc);
+			  }
+			  allMarkers.push(predefinedLocations[predefinedLocations.length - 1]);
+
+			  setCoordsList(allCoords);
+			  setMarkers(allMarkers);
+			};
+			fetchAllDirections();
+		}, []);
+	  
+		
+	  
+	return (
+
+		<View style={{ flex: 1 }}>
+
+			<MapView style={StyleSheet.absoluteFill} customMapStyle={mapStyle} >
+			  
+
+      
+				{coordsList.map((coords, index) => (
+			<Polyline
+				key={`polyline-${index}`}
+				coordinates={coords}
+				strokeColor="red"
+				strokeWidth={4}
+			/>
+			))}
+
+			{markers.map((marker, index) => (
+			<Marker
+				key={`marker-${index}`}
+				coordinate={marker}
+				pinColor={index === 0 ? 'green' : (index === markers.length - 1 ? 'red' : 'blue')}
+			/>
+			))}
+</MapView>
+			<TouchableOpacity style={styles.profileIconContainer}>
+				<Image
+					source={{ uri: 'https://firebasestorage.googleapis.com/v0/b/unify-v3-copy.appspot.com/o/c9nobwyzi35-6%3A1699?alt=media&token=a54c2b0c-4c49-4daf-92d8-fb10c27bcfb6' }} // Replace with your profile image URL
+					style={styles.profileIcon}
+				/>
+			</TouchableOpacity>
+			<Navbar />
+		</View>
+	);
+}
+const mapStyle =
 		[
 			{
 			  "elementType": "geometry",
@@ -398,50 +524,6 @@ export default function App() {
 			}
 
 	  ]
-	  const [coords, setCoords] = useState([]);
-	  const tokyoRegion = {
-		latitude: 35.6762,
-		longitude: 139.6503,
-		latitudeDelta: 0.01,
-		longitudeDelta: 0.01,
-	  };
-	  const chibaRegion = {
-		latitude: 35.6074,
-		longitude: 140.1065,
-		latitudeDelta: 0.01,
-		longitudeDelta: 0.01,
-	  };
-
-	  useEffect(() => {
-		//fetch the coordinates and then store its value into the coords Hook.
-		getDirections(tokyoRegion.latitude + "," + tokyoRegion.longitude, chibaRegion.latitude + "," + chibaRegion.longitude)
-		  .then(coords => setCoords(coords))
-		  .catch(err => console.log("Something went wrong"));
-	  }, []);
-	return (
-
-		<View style={{ flex: 1 }}>
-
-			<MapView style={StyleSheet.absoluteFill} customMapStyle={mapStyle} initialRegion={tokyoRegion}>
-			  <Polyline
-        coordinates={coords} //specify our coordinates
-        strokeColor={"blue"}
-        strokeWidth={3}
-
-      />
-			<Marker coordinate={tokyoRegion} image={{uri:'https://imgur.com/a/pKaDmKM'}} /> 
-			<Marker coordinate={chibaRegion} pinColor='yellow' />
-</MapView>
-			<TouchableOpacity style={styles.profileIconContainer}>
-				<Image
-					source={{ uri: 'https://firebasestorage.googleapis.com/v0/b/unify-v3-copy.appspot.com/o/c9nobwyzi35-6%3A1699?alt=media&token=a54c2b0c-4c49-4daf-92d8-fb10c27bcfb6' }} // Replace with your profile image URL
-					style={styles.profileIcon}
-				/>
-			</TouchableOpacity>
-			<Navbar />
-		</View>
-	);
-}
 // need to put it on firebasestorage but no idea
 const styles = StyleSheet.create({
 	profileIconContainer: {
