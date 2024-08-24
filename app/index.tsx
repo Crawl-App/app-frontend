@@ -15,7 +15,7 @@ import {decode} from "@mapbox/polyline"; //please install this package before ru
 	  );
 	  let respJson = await resp.json();
 	  let points = decode(respJson.routes[0].overview_polyline.points);
-	  console.log(points);
+	  // console.log(points);
 	  let coords = points.map((point, index) => {
 		return {
 		  latitude: point[0],
