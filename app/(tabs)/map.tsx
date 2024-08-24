@@ -439,9 +439,9 @@ export default function App() {
         coordinates={coords} //specify our coordinates
         strokeColor={"#000"}
         strokeWidth={3}
-        lineDashPattern={[0,0]}
+
       />
-			<Marker coordinate={tokyoRegion} pinColor='yellow' />
+			<Marker coordinate={tokyoRegion} image={{uri:'https://imgur.com/a/pKaDmKM'}} /> 
 			<Marker coordinate={chibaRegion} pinColor='yellow' />
 </MapView>
 			<TouchableOpacity style={styles.profileIconContainer}>
@@ -454,7 +454,7 @@ export default function App() {
 		</View>
 	);
 }
-
+// need to put it on firebasestorage but no idea
 const styles = StyleSheet.create({
 	profileIconContainer: {
 		position: 'absolute',
