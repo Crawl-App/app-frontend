@@ -11,8 +11,6 @@ import {
 } from "react-native";
 
 export default function SettingsScreen() {
-    const [modalVisible, setModalVisible] = useState(false);
-
     const pubCrawlHistory = [
         {
             date: "2024-08-01",
@@ -31,49 +29,7 @@ export default function SettingsScreen() {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Settings</Text>
-            <TouchableOpacity
-                style={styles.settingsCard}
-                onPress={() => alert("Profile pressed")}
-            >
-                <Text>Profile</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-                style={styles.settingsCard}
-                onPress={() => setModalVisible(true)}
-            >
-                <Text>History</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-                style={styles.settingsCard}
-                onPress={() => alert("Account Settings pressed")}
-            >
-                <Text>Account Settings</Text>
-            </TouchableOpacity>
-            {/* <TouchableOpacity
-        style={styles.settingsCard}
-        onPress={() => alert("Logout pressed")}
-      >
-        <Text>Logout</Text>
-      </TouchableOpacity> */}
-            <TouchableOpacity
-                style={styles.googleSignInButton}
-                onPress={() => alert("Sign in with Google pressed")}
-            >
-                <Image
-                    source={require("../assets/sign-in-w-google.png")}
-                    style={styles.googleSignInImage}
-                    resizeMode="contain"
-                />
-            </TouchableOpacity>
-
-            {/* Modal for Pub Crawl History */}
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modalVisible}
-                onRequestClose={() => setModalVisible(false)}
-            >
+            <Text style={styles.title}>History</Text>
                 <View style={styles.modalContainer}>
                     <View style={styles.modalView}>
                         <Text style={styles.modalTitle}>Pub Crawl History</Text>
@@ -101,7 +57,6 @@ export default function SettingsScreen() {
                         />
                     </View>
                 </View>
-            </Modal>
         </View>
     );
 }
