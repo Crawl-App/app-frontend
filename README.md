@@ -1,6 +1,6 @@
 # Crawl App
 
-Crawl App is a React Native application that provides [brief description of what your app does]. This README provides installation instructions and contribution guidelines for developers.
+Crawl App is a React Native application that provides [a basic interface for structuring a fun social night]. This README provides installation instructions and contribution guidelines for developers.
 
 ## Table of Contents
 
