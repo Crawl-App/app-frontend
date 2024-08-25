@@ -141,12 +141,13 @@ const styles = StyleSheet.create({
     inputBox: {
         width: 50,
         height: 40,
-        borderWidth: 1,
-        borderColor: '#ccc',
+        borderWidth: 2,
+        borderColor: 'black',
         borderRadius: 5,
         padding: 10,
         textAlign: 'center',
-        marginTop: 20,
+        marginTop: 35,
+        marginBottom: 5,
     },
     agora: {
         flexDirection: "row",

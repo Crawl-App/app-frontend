@@ -157,7 +157,7 @@ export default function App() {
          fetchAllDirections();
     };
 
-    const [numberInput, setNumberInput] = useState("");
+    const [numberInput, setNumberInput] = useState("0");
 
     const [markers2, setMarkers2] = useState([
         { id: 1, latitude: 37.78825, longitude: -122.4324 },
@@ -228,6 +228,7 @@ export default function App() {
                 <TouchableOpacity style={styles.profileIconContainer} onPress={() => router.push('/settings')}>
                     <FontAwesomeIcon icon={faGear} size={20}/>
                 </TouchableOpacity>
+
                 <Navbar onPress={handleStartCrawl}/>
             </View>
     );
@@ -610,6 +611,19 @@ const styles = StyleSheet.create({
         padding: 12,
         borderRadius: 25,
         backgroundColor: "rgba(246,194,91,1)",
+    },
+
+    numberSelectContainer: {
+        position: 'absolute',
+        top: 70,
+        right: 15,
+        width: 40,
+        height: 40,
+        padding: 12,
+        borderRadius: 25,
+        backgroundColor: "white",
+        display: "flex",
+        alignItems: "center",
     },
     profileIcon: {
         width: 45,
