@@ -184,7 +184,7 @@ export default function App() {
                             <Polyline
                                 key={`polyline-${index}`}
                                 coordinates={segment} // Pass the segment (two points) as coordinates
-                                strokeColor="red"
+                                strokeColor="#40370E"
                                 strokeWidth={4}
                             />
                         );
@@ -196,7 +196,8 @@ export default function App() {
                     <Marker
                         key={`marker-${index}`}
                         coordinate={marker}
-                        pinColor={index === 0 ? 'green' : (index === markers.length - 1 ? 'red' : 'blue')}
+                        pinColor={'#F6C25B'}
+                        
                         
                     >
                       <Callout>
