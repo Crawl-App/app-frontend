@@ -1,6 +1,6 @@
-# YourProjectName
+# Crawl App
 
-YourProjectName is a React Native application that provides [brief description of what your app does]. This README provides installation instructions and contribution guidelines for developers.
+Crawl App is a React Native application that provides [brief description of what your app does]. This README provides installation instructions and contribution guidelines for developers.
 
 ## Table of Contents
 
@@ -11,7 +11,7 @@ YourProjectName is a React Native application that provides [brief description o
 
 ## Installation
 
-To get started with YourProjectName, follow these steps:
+To get started with Crawl App, follow these steps:
 
 ### Prerequisites
 
