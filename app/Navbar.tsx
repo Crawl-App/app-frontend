@@ -1,54 +1,59 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faRoute } from '@fortawesome/free-solid-svg-icons/faRoute'
 import { faUserGroup } from '@fortawesome/free-solid-svg-icons/faUserGroup'
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { View, Text, TouchableOpacity, Animated, StyleSheet, TextInput} from 'react-native';
 
-export default function Navbar({onPress}: {onPress: (searchQuery,numberInput) => void}) {
-    const [searchQuery, setSearchQuery] = useState("");
+// <GooglePlacesAutocomplete
+//     placeholder='Search'
+//     onPress={(data, details = null) => {
+//         // 'details' is provided when fetchDetails = true
+//         console.log(data, details);
+//         setSearchQuery(data.id);
+//     }}
+//     query={{
+//         key: 'AIzaSyAUWNMB5SpuGaA_PdfIW4VSbWxsUWvYCiI',
+//         language: 'en',
+//     }}
+//     currentLocation={false}
+//
+// />
+
+
+
+export default function Navbar({
+    onPress,
+    noStops,
+    setNoStops
+    }: {
+        onPress: (numberInput: string) => void;
+        noStops: string;
+        setNoStops: React.Dispatch<React.SetStateAction<string>>;
+    }) {    const [searchQuery, setSearchQuery] = useState("");
     const [numberInput, setNumberInput] = useState("");
+
+    useEffect(() => console.log("Number Input", numberInput), [numberInput]);
 
     return (
         <View style={styles.navbarContainer}>
             <View style={styles.navbar}>
 
-                    <GooglePlacesAutocomplete
-                        placeholder='Search'
-                        onPress={(data, details = null) => {
-                            // 'details' is provided when fetchDetails = true
-                            console.log(data, details);
-                            setSearchQuery(data.id);
-                        }}
-                        query={{
-                            key: 'AIzaSyAUWNMB5SpuGaA_PdfIW4VSbWxsUWvYCiI',
-                            language: 'en',
-                        }}
-                        currentLocation={false}
-
-                    />
-
-                    <TextInput
-                        style={styles.inputBox}
-                        placeholder="0"
-                        keyboardType="numeric"
-                        value={numberInput}
-                        onChangeText={setNumberInput}
-                    />
-
                 <View style={styles.icons}>
 
+                    <TextInput
+                    style={styles.inputBox}
+                    placeholder="0"
+                    keyboardType="numeric"
+                    value={numberInput}
+                    onChangeText={setNumberInput}
+                />
 
                     <View style={styles.group372}>
 
-                        <TouchableOpacity style={styles.mainButton} onPress={() => onPress(searchQuery,numberInput)}>
+                        <TouchableOpacity style={styles.mainButton} onPress={() => onPress(numberInput)}>
                             <FontAwesomeIcon style={styles.mainButtonIcons} size={25} icon={faRoute} />
                             <Text style={styles.joinCrawl}>Start Crawl</Text>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity style={styles.mainButton} onPress={() => alert('Start Crawl pressed')}>
-                            <FontAwesomeIcon style={styles.mainButtonIcons} size={25} icon={faUserGroup} />
-                            <Text style={styles.joinCrawl}>Join Crawl</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -95,7 +100,7 @@ const styles = StyleSheet.create({
     },
     navbar: {
         // width: "100%",
-        height: 200,
+        // height: 200,
         maxHeight: 600,
         maxWidth: 750,
         width: "100%",

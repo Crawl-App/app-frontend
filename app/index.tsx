@@ -39,9 +39,12 @@ export default function App() {
     const [markers, setMarkers] = useState([]);  // Define markers state
     const [showRoute, setShowRoute] = useState(false); // State to control visibility when pressing the button
 
+    const router = useRouter();
+
     //both are to set up the initial location
-    const initialLocation = {latitude: 37.771707, longitude: -122.4053769};
-    const [myLocation, setMyLocation] = useState(initialLocation);
+    const initialLocation = {latitude: 33.8915, longitude: 151.2767, latitudeDelta:0.01, longitudeDelta:0.01};
+    const [region, setRegion] = useState(initialLocation);
+    const [userRegion, setUserRegion] = useState(initialLocation);
 
     /** might not be useful because we can get the location from the google autocomplete */
     useEffect(() => {
@@ -57,7 +60,17 @@ export default function App() {
                 return;
             }
             let location = await Location.getCurrentPositionAsync({});
-            setMyLocation(location.coords);
+            setRegion(prevLocation => ({
+                ...prevLocation, // Keep the existing altitude and speed
+                latitude: location.coords.latitude,
+                longitude: location.coords.longitude
+            }));
+
+            setUserRegion(prevLocation => ({
+                ...prevLocation, // Keep the existing altitude and speed
+                latitude: location.coords.latitude,
+                longitude: location.coords.longitude
+            }));
         } catch (err) {
             console.warn(err);
         }
@@ -76,19 +89,9 @@ export default function App() {
         // Add more predefined locations here
     ];
 
-    const handleStartCrawl = (address, numberInput) => {
-        console.log("Starting crawl");
+    const handleStartCrawl = (noStops) => {
+        console.log("Starting crawl -", noStops);
         setShowRoute(true);
-
-        /*Geocoder.from(address)
-        .then(json => {
-            var location = json.results[0].geometry.location;
-            console.log(location);
-            predefinedLocations.pop();
-            predefinedLocations.push({latitude: location.lat, longitude: location.lng});
-        })
-        .catch(error => console.warn(error));*/
-
 
         //search for the path given the starting location
         var routeCoordinates=[];
@@ -100,8 +103,8 @@ export default function App() {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        coordinates: [predefinedLocations[0].latitude, predefinedLocations[0].longitude],
-                        length: 3,
+                        coordinates: [region.latitude, region.longitude],
+                        length: parseInt(noStops, 10),
                         use_current_loc: false,
                     }),
                 });
@@ -123,6 +126,7 @@ export default function App() {
                 console.error("Error fetching route:", error);
             }
         };
+
         fetchPubCrawlRoute();
 
         //get the routes between the locations
@@ -144,15 +148,22 @@ export default function App() {
                  console.log("Coords Directions: ", directions)
              }
              console.log("All Coords: ", allCoords)
-             
+
              setCoordsList(allCoords);
                 setMarkers(allMarkers);
-               
+
          };
-        
+
          fetchAllDirections();
     };
 
+    const [numberInput, setNumberInput] = useState("");
+
+    const [markers2, setMarkers2] = useState([
+        { id: 1, latitude: 37.78825, longitude: -122.4324 },
+        { id: 2, latitude: 37.78845, longitude: -122.4322 },
+        { id: 3, latitude: 37.78865, longitude: -122.4320 }
+    ]);
 
     // Function to delete a marker by its ID
     const deleteMarker = (id) => {
@@ -174,7 +185,7 @@ export default function App() {
     //show the map
     return (
         <View style={{ flex: 1 }}>
-            <MapView style={StyleSheet.absoluteFill} customMapStyle={mapStyle} initialRegion={{latitude: myLocation.latitude,longitude:myLocation.longitude,latitudeDelta:0.01,longitudeDelta:0.01}}>
+            <MapView style={StyleSheet.absoluteFill} customMapStyle={mapStyle} region={{latitude: region.latitude,longitude:region.longitude,latitudeDelta:0.01,longitudeDelta:0.01}}>
 
                 {coordsList.map((coords, index) => {
                     // Ensure you only create a Polyline if there's a next coordinate to connect to
@@ -197,8 +208,8 @@ export default function App() {
                         key={`marker-${index}`}
                         coordinate={marker}
                         pinColor={'#F6C25B'}
-                        
-                        
+
+
                     >
                       <Callout>
                 <View>
@@ -207,12 +218,17 @@ export default function App() {
             </Callout>
                     </Marker>
                 ))}
+                <Marker
+                    key={`marker-user`}
+                    coordinate={userRegion}
+                    pinColor="green"
+                />
 
             </MapView>
                 <TouchableOpacity style={styles.profileIconContainer} onPress={() => router.push('/settings')}>
                     <FontAwesomeIcon icon={faGear} size={20}/>
                 </TouchableOpacity>
-                <Navbar onPress={handleStartCrawl} />
+                <Navbar onPress={handleStartCrawl}/>
             </View>
     );
 }
