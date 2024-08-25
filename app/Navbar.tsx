@@ -5,20 +5,6 @@ import { faUserGroup } from '@fortawesome/free-solid-svg-icons/faUserGroup'
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { View, Text, TouchableOpacity, Animated, StyleSheet, TextInput} from 'react-native';
 
-// <GooglePlacesAutocomplete
-//     placeholder='Search'
-//     onPress={(data, details = null) => {
-//         // 'details' is provided when fetchDetails = true
-//         console.log(data, details);
-//         setSearchQuery(data.id);
-//     }}
-//     query={{
-//         key: 'AIzaSyAUWNMB5SpuGaA_PdfIW4VSbWxsUWvYCiI',
-//         language: 'en',
-//     }}
-//     currentLocation={false}
-//
-// />
 
 
 
@@ -26,7 +12,7 @@ export default function Navbar({
     onPress,
     noStops,
     setNoStops
-    }: {
+}: {
         onPress: (numberInput: string) => void;
         noStops: string;
         setNoStops: React.Dispatch<React.SetStateAction<string>>;
@@ -39,6 +25,20 @@ export default function Navbar({
         <View style={styles.navbarContainer}>
             <View style={styles.navbar}>
 
+                <GooglePlacesAutocomplete
+                placeholder='Search location'
+                onPress={(data, details = null) => {
+                    // 'details' is provided when fetchDetails = true
+                    console.log(data, details);
+                    setSearchQuery(data.id);
+                }}
+                query={{
+                    key: 'AIzaSyAUWNMB5SpuGaA_PdfIW4VSbWxsUWvYCiI',
+                    language: 'en',
+                }}
+                currentLocation={false}
+
+            />
                 <View style={styles.icons}>
 
                     <TextInput
@@ -186,8 +186,8 @@ const styles = StyleSheet.create({
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
-        width: "45%",
-        maxWidth: 200,
+        width: "100%",
+        maxWidth: 600,
         minHeight: 70,
         borderRadius: 25,
         backgroundColor: "white",
@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
         shadowOffset: {width: -2, height: 4},
         shadowOpacity: 0.2,
         shadowRadius: 3,
-
+        marginTop: 10,
 
     },
     mainButtonIcons: {
