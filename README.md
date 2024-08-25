@@ -70,7 +70,7 @@ We welcome contributions to Crawl App! To contribute, please follow these guidel
 2. **Clone your fork**:
 
     ```bash
-    git clone https://github.com/yourusername/yourprojectname.git
+    git clone git@github.com:Crawl-App/app-frontend.git
     ```
 
 3. **Create a new branch**:
