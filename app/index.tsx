@@ -108,11 +108,11 @@ export default function App() {
 
                 const data = await response.json();
 
-                routeCoordinates = data.route[0].map(loc => ({
-                    latitude: loc[1],
-                    longitude: loc[2],
-                    name:loc[0],
-                }));
+                routeCoordinates = data.route[0].map((loc, index) => ({
+                  latitude: loc[1],
+                  longitude: loc[2],
+                  name: `${index + 1}. ${loc[0]}`, // This will prefix the name with the index + 1
+              }));
 
                 setCoordsList(routeCoordinates);
                 console.log("All Coords: ", routeCoordinates)
