@@ -92,11 +92,11 @@ We welcome contributions to Crawl App! To contribute, please follow these guidel
     git push origin feature/your-feature
     ```
 
-6. **Submit a pull request**: Go to the original repository on GitHub and create a new pull request from your branch.
+6. **Submit a pull request**: Go to our original repository on GitHub and create a new pull request from your branch.
 
 ### Code Style
 
-- Follow the coding style guidelines used in the project.
+- Please follow the AirBnb Style Guide
 - Use Prettier and ESLint to ensure code quality and consistency.
 
 ## License
