@@ -55,6 +55,11 @@ export default function Navbar({
                             <FontAwesomeIcon style={styles.mainButtonIcons} size={25} icon={faRoute} />
                             <Text style={styles.joinCrawl}>Start Crawl</Text>
                         </TouchableOpacity>
+
+                        <TouchableOpacity style={styles.mainButton} onPress={() => onPress(numberInput)}>
+                            <FontAwesomeIcon style={styles.mainButtonIcons} size={25} icon={faUserGroup} />
+                            <Text style={styles.joinCrawl}>Join Crawl</Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
             </View>
@@ -186,7 +191,7 @@ const styles = StyleSheet.create({
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
-        width: "100%",
+        width: "48%",
         maxWidth: 600,
         minHeight: 70,
         borderRadius: 25,
