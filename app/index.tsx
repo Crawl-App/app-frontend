@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import MapView,{ Polyline } from 'react-native-maps';
+import MapView,{ Callout, Polyline } from 'react-native-maps';
 import { Marker } from "react-native-maps";
-import { StyleSheet, View, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, View,Text, Image, TouchableOpacity } from 'react-native';
 import Navbar from "./Navbar"; // Ensure this path is correct
 import {decode} from "@mapbox/polyline"; //please install this package before running!
 import * as Location from 'expo-location';
@@ -91,6 +91,7 @@ export default function App() {
 
 
         //search for the path given the starting location
+        var routeCoordinates=[];
         const fetchPubCrawlRoute = async () => {
             try {
                 const response = await fetch('https://crawl-nine.vercel.app/find_pub_crawl', {
@@ -100,19 +101,21 @@ export default function App() {
                     },
                     body: JSON.stringify({
                         coordinates: [predefinedLocations[0].latitude, predefinedLocations[0].longitude],
-                        length: 2,
+                        length: 3,
                         use_current_loc: false,
                     }),
                 });
 
                 const data = await response.json();
 
-                const routeCoordinates = data.route[0].map(loc => ({
+                routeCoordinates = data.route[0].map(loc => ({
                     latitude: loc[1],
                     longitude: loc[2],
+                    name:loc[0],
                 }));
 
                 setCoordsList(routeCoordinates);
+                console.log("All Coords: ", routeCoordinates)
                 setMarkers(routeCoordinates);
                 console.log("Coords", coordsList);
                 console.log("Markers", markers);
@@ -123,29 +126,33 @@ export default function App() {
         fetchPubCrawlRoute();
 
         //get the routes between the locations
-        // const fetchAllDirections = async () => {
-        //     for (let i = 0; i < coordsList.length - 1; i++) {
-        //         const startLoc = coordsList[i];
-        //         const destinationLoc = coordsList[i + 1];
-        //         const directions = await getDirections(
-        //             `${startLoc.latitude},${startLoc.longitude}`,
-        //             `${destinationLoc.latitude},${destinationLoc.longitude}`
-        //         );
-        //         // setCoordsList(allCoords);
-        //         // setMarkers(allMarkers);
-        //         console.log("Markers Festches: ", markers)
-        //         console.log("Coords Directions: ", directions)
-        //     }
-        // };
-        //
-        // fetchAllDirections();
+         const fetchAllDirections = async () => {
+          const allCoords = [];
+			  const allMarkers = [];
+             for (let i = 0; i < routeCoordinates.length - 1; i++) {
+                 const startLoc = routeCoordinates[i];
+                 const destinationLoc = routeCoordinates[i + 1];
+                 const directions = await getDirections(
+                     `${startLoc.latitude},${startLoc.longitude}`,
+                     `${destinationLoc.latitude},${destinationLoc.longitude}`
+                 );
+                 allCoords.push(directions);
+				         allMarkers.push(startLoc);
+               //setCoordsList(allCoords);
+                // setMarkers(allMarkers);
+                 console.log("Markers Festches: ", markers)
+                 console.log("Coords Directions: ", directions)
+             }
+             console.log("All Coords: ", allCoords)
+             
+             setCoordsList(allCoords);
+                setMarkers(allMarkers);
+               
+         };
+        
+         fetchAllDirections();
     };
 
-    const [markers2, setMarkers2] = useState([
-        { id: 1, latitude: 37.78825, longitude: -122.4324 },
-        { id: 2, latitude: 37.78845, longitude: -122.4322 },
-        { id: 3, latitude: 37.78865, longitude: -122.4320 }
-    ]);
 
     // Function to delete a marker by its ID
     const deleteMarker = (id) => {
@@ -190,7 +197,14 @@ export default function App() {
                         key={`marker-${index}`}
                         coordinate={marker}
                         pinColor={index === 0 ? 'green' : (index === markers.length - 1 ? 'red' : 'blue')}
-                    />
+                        
+                    >
+                      <Callout>
+                <View>
+                    <Text>{marker.name}</Text>
+                </View>
+            </Callout>
+                    </Marker>
                 ))}
 
             </MapView>
